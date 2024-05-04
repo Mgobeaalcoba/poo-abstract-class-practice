@@ -2,6 +2,7 @@ package org.mgobea.pooclasesabstractas.form;
 
 import org.mgobea.pooclasesabstractas.form.elementos.*;
 import org.mgobea.pooclasesabstractas.form.elementos.select.Opcion;
+import org.mgobea.pooclasesabstractas.form.validador.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +20,18 @@ public class EjemploForm {
 
         // Voy construyendo entonces mi formulario:
         InputForm username = new InputForm("username"); // Por defecto es de tipo text. Se puede cambiar con setTipo
+        username.addValidador(new RequeridoValidador());
+
         InputForm password = new InputForm("clave", "password");
+        password.addValidador(new RequeridoValidador())
+                .addValidador(new LargoValidador(6, 12));
+
         InputForm email = new InputForm("email", "email");
+        email.addValidador(new RequeridoValidador())
+                .addValidador(new EmailValidador());
+
         InputForm edad = new InputForm("edad", "number");
+        edad.addValidador(new NumeroValidador());
 
         TextareaForm experiencia = new TextareaForm("experiencia", 5, 20);
 
@@ -36,6 +46,7 @@ public class EjemploForm {
         saludo.setValor("Hola, ¿Que tal? Este campo está deshabilitado");
 
         SelectForm lenguajes = new SelectForm("lenguajes"); // La lista de opciones se puede agregar con addOpcion
+        lenguajes.addValidador(new NoNulo());
 
         Opcion java = new Opcion("Java", "java");
         Opcion python = new Opcion("Python", "python");
@@ -67,7 +78,7 @@ public class EjemploForm {
                 addOpcion(R).
                 addOpcion(perl); // Encadenamiento de llamadas dado que retorna la misma instancia
 
-        python.setSelected(true);
+        //python.setSelected(true);
 
         username.setValor("mgobea");
         password.setValor("123456");
@@ -102,5 +113,14 @@ public class EjemploForm {
             System.out.println(e.dibujarHtml());
             System.out.println("<br>");
         }); // Usamos una lambda function al interior del forEach
+
+        // Validamos si son válidos todos los elementos del form y en caso contrario imprimimos los errores
+        elementos.forEach(e -> {
+            if(!e.esValido()) {
+                e.getErrores().forEach(err -> {
+                    System.out.println(e.getNombre()+": "+err);
+                });
+            }
+        });
     }
 }
