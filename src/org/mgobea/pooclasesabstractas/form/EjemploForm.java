@@ -80,11 +80,11 @@ public class EjemploForm {
 
         //python.setSelected(true);
 
-        username.setValor("mgobea");
-        password.setValor("123456");
-        email.setValor("gobeamariano@gmail.com");
-        edad.setValor("36");
-        java.setSelected(true);
+        username.setValor("");
+        password.setValor("");
+        email.setValor("");
+        edad.setValor("36s");
+        // java.setSelected(true);
         experiencia.setValor("Tengo experiencia en Java, Python y JavaScript");
 
         /*
@@ -117,9 +117,7 @@ public class EjemploForm {
         // Validamos si son válidos todos los elementos del form y en caso contrario imprimimos los errores
         elementos.forEach(e -> {
             if(!e.esValido()) {
-                e.getErrores().forEach(err -> {
-                    System.out.println(e.getNombre()+": "+err);
-                });
+                e.getErrores().forEach(System.out::println);
             }
         });
     }

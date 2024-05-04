@@ -1,6 +1,7 @@
 package org.mgobea.pooclasesabstractas.form.elementos;
 
 import org.mgobea.pooclasesabstractas.form.validador.Validador;
+import org.mgobea.pooclasesabstractas.form.validador.mensaje.MensajeFormateable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +44,11 @@ abstract public class ElementoForm {
     public boolean esValido() {
         for(Validador v: this.validadores) {
             if(!v.esValido(this.valor)) {
-                this.errores.add(v.getMensaje());
+                if(v instanceof MensajeFormateable) {
+                    this.errores.add(((MensajeFormateable) v).getMensajeFormateado(this.nombre));
+                } else {
+                    this.errores.add(String.format(v.getMensaje(), this.nombre));
+                }
             }
         }
         return this.errores.isEmpty();
